@@ -18,6 +18,7 @@ def index(request):
     return render(request, 'bboard/index.html', context)
 
 
+# def by_rubric(request, rubric_id, mode):
 def by_rubric(request, rubric_id):
     bbs = Bb.objects.filter(rubric=rubric_id)
     # rubrics = Rubric.objects.all()
