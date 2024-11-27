@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from django.template import loader
 from django.template.loader import render_to_string
@@ -11,13 +11,34 @@ from bboard.models import Bb, Rubric
 
 
 # Основной (вернуть)
-# def index(request):
-#     bbs = Bb.objects.order_by('-published')
-#     # rubrics = Rubric.objects.all()
-#     rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
-#     context = {'bbs': bbs, 'rubrics': rubrics}
-#
-#     return render(request, 'bboard/index.html', context)
+def index(request):
+    # Todo:Удалить
+    # print(request.scheme)
+    # print(request.path)
+    # print(request.path_info)
+    # print(request.encoding)
+    # print(request.content_type)
+    # print(request.content_params)
+    # print(request.headers)
+    # print(request.headers['Accept-Encoding'])
+    # print(request.headers['accept-encoding'])
+    # print(request.headers['accept_encoding'])
+    # print(request.META)
+    # print(request.META['CONTENT_TYPE'])
+    # print(request.META['HTTP_HOST'])
+    # print(request.META['HTTP_USER_AGENT'])
+    # print(request.META['HTTP_REFERER'])
+    # print(request.body)
+    # print(request.resolver_match)
+    # print(request.get_host())
+    # Todo:Удалить
+
+    bbs = Bb.objects.order_by('-published')
+    # rubrics = Rubric.objects.all()
+    rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+    context = {'bbs': bbs, 'rubrics': rubrics}
+
+    return render(request, 'bboard/index.html', context)
 
 
 # def index(request):
@@ -37,11 +58,11 @@ from bboard.models import Bb, Rubric
 #     return HttpResponse(template.render(context, request))
 
 
-def index(request):
-    bbs = Bb.objects.all()
-    rubrics = Rubric.objects.all()
-    context = {'bbs': bbs, 'rubrics': rubrics}
-    return HttpResponse(render_to_string('bboard/index.html', context, request))
+# def index(request):
+#     bbs = Bb.objects.all()
+#     rubrics = Rubric.objects.all()
+#     context = {'bbs': bbs, 'rubrics': rubrics}
+#     return HttpResponse(render_to_string('bboard/index.html', context, request))
 
 
 # def by_rubric(request, rubric_id, mode):
@@ -94,6 +115,9 @@ def add_and_save(request):
             bbf.save()
             return HttpResponseRedirect(reverse('bboard:by_rubric',
                         kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+            # return HttpResponseRedirect('/')
+            # return HttpResponseRedirect(reverse('bboard:index'))
+            # return HttpResponseRedirect(reverse('https://www.random.org/'))
         else:
             context = {'form': bbf}
             return render(request, 'bboard/bb_create.html', context)
@@ -101,3 +125,16 @@ def add_and_save(request):
         bbf = BbForm()
         context = {'form': bbf}
         return render(request, 'bboard/bb_create.html', context)
+
+
+def bb_detail(request, bb_id):
+    try:
+        bb = Bb.objects.get(pk=bb_id)
+    except Bb.DoesNotExist:
+        # return HttpResponseNotFound('Такое объявление не существует')
+        return Http404('Такое объявление не существует')
+
+    rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)
+    context = {'bb': bb, 'rubrics': rubrics}
+
+    return render(request, 'bboard/bb_detail.html', context)
