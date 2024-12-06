@@ -4,7 +4,7 @@ from django.views.generic.edit import CreateView
 from bboard.models import Bb
 from bboard.views import (index, by_rubric, BbCreateView,
                           add_and_save, bb_detail, BbRubricBbsView,
-                          BbDetailView, BbEditView, BbDeleteView)
+                          BbDetailView, BbEditView, BbDeleteView, BbIndexView)
 
 app_name = 'bboard'
 
@@ -17,5 +17,6 @@ urlpatterns = [
 
     path('detail/<int:pk>/', BbDetailView.as_view(), name='detail'),
 
-    path('', index, name='index'),
+    # path('', index, name='index'),
+    path('', BbIndexView.as_view(), name='index'),
 ]
