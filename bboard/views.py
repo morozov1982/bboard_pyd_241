@@ -7,9 +7,10 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import (require_http_methods,
                                           require_GET, require_POST, require_safe)
+from django.views.generic.base import RedirectView
 from django.views.generic.dates import ArchiveIndexView
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 
@@ -42,6 +43,10 @@ class BbIndexView(ArchiveIndexView):
         return context
 
 
+class BbRedirectView(RedirectView):
+    url = '/'
+
+
 def by_rubric(request, rubric_id):
     # bbs = Bb.objects.filter(rubric=rubric_id)
     bbs = get_list_or_404(Bb, rubric=rubric_id)
@@ -56,6 +61,7 @@ def by_rubric(request, rubric_id):
     return render(request, 'bboard/by_rubric.html', context)
 
 
+# Основной, вернуть
 class BbRubricBbsView(ListView):
     template_name = 'bboard/rubric_bbs.html'
     context_object_name = 'bbs'
@@ -70,6 +76,25 @@ class BbRubricBbsView(ListView):
         context['current_rubric'] = Rubric.objects.get(
                                                    pk=self.kwargs['rubric_id'])
         return context
+
+
+# class BbRubricBbsView(SingleObjectMixin, ListView):
+#     template_name = 'bboard/rubric_bbs.html'
+#     pk_url_kwarg = 'rubric_id'
+#
+#     def get(self, request, *args, **kwargs):
+#         self.object = self.get_object(queryset=Rubric)
+#         return super().get(request, *args, **kwargs)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['current_rubric'] = self.object
+#         context['rubrics'] = Rubric.objects.all()
+#         context['bbs'] = context['object_list']
+#         return context
+#
+#     def get_queryset(self):
+#         return self.object.bb_set.all()
 
 
 # Основной (вернуть)
