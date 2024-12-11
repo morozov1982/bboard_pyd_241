@@ -13,9 +13,7 @@
 </head>
 <body>
 
-<header>
-    <h1>Объявления</h1>
-</header>
+{% include "layout/inc/inc_header.html" %}
 
 {% include "layout/inc/inc_main_menu.html" %}
 
@@ -25,9 +23,7 @@
     {% endblock %}
 </section>
 
-<footer>
-    {% now 'SHORT_DATETIME_FORMAT' %}
-</footer>
+{% include "layout/inc/inc_footer.html" %}
 
 </body>
 </html>
