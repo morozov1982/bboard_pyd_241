@@ -2,7 +2,7 @@
 
 {% block content %}
     
-{#    {{ block.super }} #}
+{#    {{ block.super }}#}
 
     {% with bb_count=bbs.count %}
         {% if bb_count > 0 %}

@@ -15,7 +15,7 @@
     <h1>Объявления</h1>
 </header>
 
-{% include "layout/inc/inc_main_menu.html" %}
+{#{% include "layout/inc/inc_main_menu.html" %}#}
 
 <section>
     {% block content %}
