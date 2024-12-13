@@ -109,7 +109,7 @@ class Bb(models.Model):
         blank=True,
         default=0,
         verbose_name='Цена',
-        validators=[validate_even]
+        # validators=[validate_even]
     )
 
     published = models.DateTimeField(

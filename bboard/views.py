@@ -122,6 +122,7 @@ class BbCreateView(CreateView):
     model = Bb
     form_class = BbForm
     success_url = reverse_lazy('bboard:index')
+    # initial = {'price': 1000.0}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -143,12 +144,13 @@ def add_and_save(request):
             context = {'form': bbf}
             return render(request, 'bboard/bb_create.html', context)
     else:
+        # bbf = BbForm(initial={'price': 1000.0})
         bbf = BbForm()
-
         context = {'form': bbf}
         return render(request, 'bboard/bb_create.html', context)
 
 
+# Основной, вернуть
 class BbEditView(UpdateView):
     model = Bb
     form_class = BbForm
@@ -159,6 +161,24 @@ class BbEditView(UpdateView):
         context['rubrics'] = Rubric.objects.annotate(
                                             cnt=Count('bb')).filter(cnt__gt=0)
         return context
+
+
+def edit(request, pk):
+    bb = Bb.objects.get(pk=pk)
+    if request.method == 'POST':
+        bbf = BbForm(request.POST, instance=bb)
+        if bbf.is_valid():
+            # if bbf.has_changed():
+            bbf.save()
+            return HttpResponseRedirect(reverse('bboard:by_rubric',
+                        kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf}
+            return render(request, 'bboard/bb_form.html', context)
+    else:
+        bbf = BbForm(instance=bb)
+        context = {'form': bbf}
+        return render(request, 'bboard/bb_form.html', context)
 
 
 def bb_detail(request, bb_id):
