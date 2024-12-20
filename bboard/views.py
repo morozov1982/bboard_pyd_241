@@ -1,3 +1,6 @@
+from django.contrib.auth import get_user
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.forms import modelformset_factory
@@ -119,12 +122,15 @@ class BbRubricBbsView(ListView):
 
 
 # Основной (вернуть)
-class BbCreateView(CreateView):
+class BbCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'bboard/bb_create.html'
     model = Bb
     form_class = BbForm
     success_url = reverse_lazy('bboard:index')
     # initial = {'price': 1000.0}
+
+    def test_func(self):
+        return self.request.user.is_staff
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -218,6 +224,9 @@ class BbDeleteView(DeleteView):
         return context
 
 
+@login_required(login_url='/login/')
+@user_passes_test(lambda user: user.is_staff)
+# @permission_required('bboard.add_rubric')
 def rubrics(request):
     RubricFormSet = modelformset_factory(Rubric, fields=('name',),
                                          can_order=True,
