@@ -4,6 +4,9 @@ from os.path import splitext
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
+from easy_thumbnails.fields import ThumbnailerImageField
+
+
 # from precise_bbcode.fields import BBCodeTextField
 
 
@@ -183,6 +186,14 @@ class Bb(models.Model):
     # archive = models.FileField(upload_to='archives/')
     # archive = models.FileField(upload_to='archives/%Y/%m/%d/')
     # file = models.FileField(upload_to=get_timestamp_path)
+
+    img = models.ImageField(blank=True,
+                            upload_to=get_timestamp_path,
+                            verbose_name='Изображение')
+
+    # thumb = ThumbnailerImageField(
+    #     resize_source={'size': (400, 300), 'crop': 'scale'},
+    # )
 
     objects = models.Manager()
     by_price = BbManager()

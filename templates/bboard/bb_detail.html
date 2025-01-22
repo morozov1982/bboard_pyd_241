@@ -1,6 +1,7 @@
 {% extends "layout/basic.html" %}
 {% load bbcode_tags %}
 {% load filtertags %}
+    {% load thumbnail %}
 
 {% block title %}{{ bb.title }}{% endblock %}
 
@@ -9,6 +10,17 @@
         <p>Рубрика: <a href="{% url 'bboard:by_rubric' bb.rubric.pk %}">
                                                 {{ bb.rubric.name }}</a></p>
         <h2>{{ bb.title }}</h2>
+
+        {% if bb.img %}
+        <p>
+{#            <img src="{{ bb.img.url }}" alt="{{ bb.title }}" title="{{ bb.title }}">#}
+{#            <img src="{{ bb.img|thumbnail_url:'default' }}" alt="{{ bb.title }}" title="{{ bb.title }}">#}
+{#            <img src="{% thumbnail bb.img 'default' %}" alt="{{ bb.title }}" title="{{ bb.title }}">#}
+{#            <img src="{% thumbnail bb.img 'default' bw=True %}" alt="{{ bb.title }}" title="{{ bb.title }}">#}
+            <img src="{% thumbnail bb.img '300x200' crop='smart' %}" alt="{{ bb.title }}" title="{{ bb.title }}">
+        </p>
+        {% endif %}
+
         <p>{% bbcode bb.content %}</p>
         <p>Цена: <strong>{{ bb.price|cur:'руб.' }}</strong></p>
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
