@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user
+from django.contrib.auth import get_user, authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
@@ -361,4 +361,21 @@ def delete_img(request, pk):
     img = Img.objects.get(pk=pk)
     img.img.delete(save=False)
     img.delete()
+    return redirect('bboard:index')
+
+
+def my_login(request):
+    user_name = request.POST['username']
+    pass_word = request.POST['password']
+    user = authenticate(request, username=user_name, password=pass_word)
+
+    if user is not None:
+        login(request, user)
+        return render(request, 'bboard/login.html',
+                      {'user': user})
+
+    return redirect('bboard:index')
+
+def my_logout(request):
+    logout(request)
     return redirect('bboard:index')
