@@ -41,6 +41,7 @@ urlpatterns = [
     path('accounts/reset/done/', PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
 
+    path('testapp/', include('testapp.urls', namespace='testapp')),
     path('todo/', include('todolist.urls', namespace='todo')),
 
     path('', include('bboard.urls', namespace='bboard')),
