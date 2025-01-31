@@ -24,6 +24,7 @@ from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteVi
 
 from bboard.forms import BbForm, RubricBaseFormSet, SearchForm
 from bboard.models import Bb, Rubric, Img
+from bboard.signals import add_bb
 
 
 # Основной (вернуть)
@@ -155,6 +156,11 @@ class BbCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        add_bb.send(sender=self.__class__, instance=self.object)
+        return response
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
