@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 from captcha.conf.settings import CAPTCHA_TIMEOUT, CAPTCHA_LENGTH
-from django.conf.global_settings import STATICFILES_DIRS, ABSOLUTE_URL_OVERRIDES, MEDIA_URL, AUTH_USER_MODEL
+from django.conf.global_settings import STATICFILES_DIRS, ABSOLUTE_URL_OVERRIDES, MEDIA_URL, AUTH_USER_MODEL, \
+    EMAIL_BACKEND, DEFAULT_FROM_EMAIL, EMAIL_HOST
 from django.contrib import messages
 from django_bootstrap5.core import BOOTSTRAP5
 
@@ -266,3 +267,38 @@ THUMBNAIL_PRESERVE_EXTENSIONS = ('png',)
 # MESSAGE_TAGS = {
 #     CRITICAL: 'critical'
 # }
+
+#######################
+######## Email ########
+#######################
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+### 'django.core.mail.backends.smtp.EmailBackend' ###
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = ""
+# EMAIL_HOST_PASSWORD = ""
+
+EMAIL_USE_LOCALTIME = True
+
+### 'django.core.mail.backends.filebased.EmailBackend' ###
+# EMAIL_FILE_PATH = BASE_DIR / 'email'
+
+# ADMINS = [
+#     ('admin', 'admin@supersite.kz'),
+#     ('admin2', 'admin2@supersite.kz'),
+#     ('admin3', 'admin3@supersite.kz'),
+# ]
+#
+# MANAGERS = [
+#     ('manager', 'manager@supersite.kz'),
+#     ('manager2', 'manager2@supersite.kz'),
+#     ('manager3', 'manager3@supersite.kz'),
+# ]
