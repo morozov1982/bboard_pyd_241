@@ -13,8 +13,10 @@ from django.shortcuts import render, redirect, get_object_or_404, get_list_or_40
 from django.template import loader
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import (require_http_methods,
                                           require_GET, require_POST, require_safe)
+from django.views.decorators.vary import vary_on_headers, vary_on_cookie
 from django.views.generic.base import RedirectView
 from django.views.generic.dates import ArchiveIndexView
 from django.views.generic.list import ListView
@@ -37,6 +39,12 @@ from bboard.signals import add_bb
 #     return render(request, 'bboard/index.html', context)
 
 
+# @cache_page(60 * 5)
+# @cache_page(30)
+# @vary_on_headers('User-Agent')
+# @vary_on_headers('Cookie')
+# @vary_on_headers('User-Agent', 'Cookie')
+# @vary_on_cookie
 def index(request):
     bbs = Bb.objects.order_by('-published')
     # rubrics = Rubric.objects.annotate(cnt=Count('bb')).filter(cnt__gt=0)

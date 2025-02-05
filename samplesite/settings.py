@@ -14,7 +14,7 @@ from pathlib import Path
 
 from captcha.conf.settings import CAPTCHA_TIMEOUT, CAPTCHA_LENGTH
 from django.conf.global_settings import STATICFILES_DIRS, ABSOLUTE_URL_OVERRIDES, MEDIA_URL, AUTH_USER_MODEL, \
-    EMAIL_BACKEND, DEFAULT_FROM_EMAIL, EMAIL_HOST
+    EMAIL_BACKEND, DEFAULT_FROM_EMAIL, EMAIL_HOST, CACHE_MIDDLEWARE_ALIAS, CACHE_MIDDLEWARE_SECONDS
 from django.contrib import messages
 from django_bootstrap5.core import BOOTSTRAP5
 
@@ -60,8 +60,12 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # 'django.middleware.cache.UpdateCacheMiddleware',  # для кэша
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',  # для кэша
+
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -302,3 +306,38 @@ EMAIL_USE_LOCALTIME = True
 #     ('manager2', 'manager2@supersite.kz'),
 #     ('manager3', 'manager3@supersite.kz'),
 # ]
+
+
+#######################
+#######  Cache  #######
+#######################
+
+CACHES = {
+    # 'default': {
+    #     # 'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+    #     # 'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    #     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    #     # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    #     # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    #     'LOCATION': 'cache1',
+    # },
+    # 'special': {
+    #     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    #     'LOCATION': 'cache2',
+    # },
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+        'TIMEOUT': 120,  # по умолчанию 300 сек.
+        'OPITIONS': {
+            'MAX_ENTRIES': 200,
+        }
+    },
+    'redis': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0',
+    },
+}
+
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = 10
