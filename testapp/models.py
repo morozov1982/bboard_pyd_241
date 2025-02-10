@@ -8,7 +8,6 @@ class AdvUser(models.Model):
     is_activated = models.BooleanField(default=True)
 
 # class Profile(models.Model):
-#     # is_activated = models.BooleanField(default=True)
 #     phone = models.CharField(max_length=20)
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -86,3 +85,13 @@ class PrivateMessage(Message):
 #
 #     # class Meta:
 #         # ordering = ['order', 'name']
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        permissions = (
+            ('hide_comments', 'Можно скрывать комментарии'),
+        )
