@@ -23,9 +23,12 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from bboard.forms import BbForm, RubricBaseFormSet, SearchForm
 from bboard.models import Bb, Rubric, Img
+from bboard.serializers import RubricSerializer
 from bboard.signals import add_bb
 
 
@@ -422,3 +425,22 @@ def my_login(request):
 def my_logout(request):
     logout(request)
     return redirect('bboard:index')
+
+
+###########
+### DRF ###
+###########
+@api_view(['GET'])
+def api_rubrics(request):
+    if request.method == 'GET':
+        rubrics = Rubric.objects.all()
+        serializer = RubricSerializer(rubrics, many=True)
+        # return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def api_rubric_detail(request, pk):
+    rubric = Rubric.objects.get(pk=pk)
+    serializer = RubricSerializer(rubric)
+    return Response(serializer.data)
