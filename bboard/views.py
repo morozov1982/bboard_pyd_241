@@ -23,9 +23,11 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from bboard.forms import BbForm, RubricBaseFormSet, SearchForm
 from bboard.models import Bb, Rubric, Img
@@ -467,3 +469,44 @@ def api_rubric_detail(request, pk):
     elif request.method == 'DELETE':
         rubric.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#####  APIView  #####
+# class APIRubrics(APIView):
+#     def get(self, request):
+#         rubrics = Rubric.objects.all()
+#         serializer = RubricSerializer(rubrics, many=True)
+#         return Response(serializer.data)
+#
+#     def post(self, request):
+#         serializer = RubricSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data,
+#                             status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,
+#                         status=status.HTTP_400_BAD_REQUEST)
+
+
+#####  generics  #####   generics.RetrieveUpdateAPIView, generics.RetrieveDestroyAPIView
+class APIRubrics(generics.ListCreateAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+class APIRubricDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+### ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+class APIRubricList(generics.ListAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+
+#####  Метаконтроллеры  #####
+class APIRubricViewSet(ModelViewSet):
+# class APIRubricViewSet(ReadOnlyModelViewSet):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer

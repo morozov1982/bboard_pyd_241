@@ -1,19 +1,30 @@
-from django.urls import path
+from django.urls import path, include
 from django.views.decorators.cache import cache_page
 from django.views.generic.dates import WeekArchiveView, DayArchiveView
 from django.views.generic.edit import CreateView
+from rest_framework.routers import DefaultRouter
 
 from bboard.models import Bb
 from bboard.views import (index, by_rubric, BbCreateView,
                           add_and_save, bb_detail, BbRubricBbsView,
                           BbDetailView, BbEditView, BbDeleteView, BbIndexView,
-                          BbRedirectView, edit, rubrics, bbs, search, api_rubrics, api_rubric_detail)
+                          BbRedirectView, edit, rubrics, bbs, search,
+                          api_rubrics, api_rubric_detail,
+                          APIRubrics, APIRubricDetail, APIRubricViewSet)
 
 app_name = 'bboard'
 
+router = DefaultRouter()
+router.register('rubrics', APIRubricViewSet)
+
 urlpatterns = [
-    path('api/rubrics/<int:pk>/', api_rubric_detail),
-    path('api/rubrics/', api_rubrics),
+    # path('api/rubrics/<int:pk>/', api_rubric_detail),
+    # path('api/rubrics/', api_rubrics),
+    # path('api/rubrics/<int:pk>/', APIRubrics.as_view()),
+    # path('api/rubrics/', APIRubrics.as_view()),
+    # path('api/rubrics/<int:pk>/', APIRubricDetail.as_view()),
+    # path('api/rubrics/', APIRubrics.as_view()),
+    path('api/', include(router.urls)),
 
     path('rubrics/', rubrics, name='rubrics'),
     path('bbs/<int:rubric_id>/', bbs, name='bbs'),
