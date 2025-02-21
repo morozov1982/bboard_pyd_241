@@ -24,7 +24,8 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from rest_framework import status, generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -434,6 +435,7 @@ def my_logout(request):
 ### DRF ###
 ###########
 @api_view(['GET', 'POST'])
+# @permission_classes((IsAuthenticated,))
 def api_rubrics(request):
     if request.method == 'GET':
         rubrics = Rubric.objects.all()
@@ -510,3 +512,4 @@ class APIRubricViewSet(ModelViewSet):
 # class APIRubricViewSet(ReadOnlyModelViewSet):
     queryset = Rubric.objects.all()
     serializer_class = RubricSerializer
+    # permission_classes = (IsAuthenticated,)
