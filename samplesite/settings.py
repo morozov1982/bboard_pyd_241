@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=tmq^(flv8$!!=k(oo@xt-65ha*254nv%aoj10z$uk*wyk%*3o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -107,20 +107,20 @@ WSGI_APPLICATION = 'samplesite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ATOMIC_REQUEST': True,  # False,
-        # 'AUTOCOMMIT': False,     # True,
-    }
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql_psycopg2",
-    #     "NAME": "django_db",
-    #     "USER": "db_user",
-    #     "PASSWORD": "12345",
-    #     "HOST": "127.0.0.1",
-    #     "PORT": "5432",
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    #     # 'ATOMIC_REQUEST': True,  # False,
+    #     # 'AUTOCOMMIT': False,     # True,
     # }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "django_db",
+        "USER": "db_user",
+        "PASSWORD": "12345",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
 }
 
 
