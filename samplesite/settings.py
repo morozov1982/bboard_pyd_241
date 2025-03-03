@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'bboard',  # 'bboard.apps.BboardConfig',
-    'testapp',
+    # 'testapp',
     # 'todolist',
 
     'django_cleanup',  # всегда в самом низу!!!
